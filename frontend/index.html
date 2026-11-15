@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Churn Predictor</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    label { display: block; margin-top: .75rem; font-size: .9rem; }
+    select, input { width: 100%; padding: .4rem; box-sizing: border-box; }
+    button { margin-top: 1.25rem; padding: .6rem 1.2rem; cursor: pointer; }
+    #result { margin-top: 1rem; font-size: 1.1rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Customer Churn Prediction</h2>
+  <form id="f" onsubmit="return false"></form>
+  <button onclick="predict()">Predict</button>
+  <div id="result"></div>
+
+<script>
+const API = "https://churn-api-dhrd.onrender.com";
+
+const YN = ["Yes","No"], YNI = ["Yes","No","No internet service"];
+const fields = {
+  gender:["Male","Female"], SeniorCitizen:[0,1], Partner:YN, Dependents:YN,
+  tenure:"number", PhoneService:YN,
+  MultipleLines:["Yes","No","No phone service"],
+  InternetService:["DSL","Fiber optic","No"],
+  OnlineSecurity:YNI, OnlineBackup:YNI, DeviceProtection:YNI,
+  TechSupport:YNI, StreamingTV:YNI, StreamingMovies:YNI,
+  Contract:["Month-to-month","One year","Two year"], PaperlessBilling:YN,
+  PaymentMethod:["Electronic check","Mailed check","Bank transfer (automatic)","Credit card (automatic)"],
+  MonthlyCharges:"number", TotalCharges:"number"
+};
+
+const form = document.getElementById("f");
+for (const [name, opts] of Object.entries(fields)) {
+  const l = document.createElement("label");
+  l.textContent = name;
+  const el = opts === "number"
+    ? Object.assign(document.createElement("input"), {type:"number", step:"any", value:0})
+    : Object.assign(document.createElement("select"), {innerHTML: opts.map(o => `<option>${o}</option>`).join("")});
+  el.name = name;
+  l.appendChild(el);
+  form.appendChild(l);
+}
+
+async function predict() {
+  const data = {};
+  for (const [name, opts] of Object.entries(fields)) {
+    const v = form.elements[name].value;
+    data[name] = (opts === "number" || name === "SeniorCitizen") ? Number(v) : v;
+  }
+  const out = document.getElementById("result");
+  out.textContent = "Predicting... (the first request may take up to a minute)";
+  try {
+    const r = await fetch(API + "/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error("API error " + r.status);
+    const j = await r.json();
+    out.textContent = `Prediction: ${j.prediction} (probability ${(j.probability*100).toFixed(1)}%)`;
+  } catch (e) {
+    out.textContent = "Error: " + e.message;
+  }
+}
+</script>
+</body>
+</html>
