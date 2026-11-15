@@ -2,7 +2,7 @@ Customer Churn Prediction System
 An end-to-end machine learning system that predicts whether a telecom customer is likely to leave, based on historical customer data, and serves predictions through a REST API.
 Built for the Cognirex Solutions AI/ML Engineer Technical Assessment (Round 2).
 Author: Amshala Sravanthi
-________________________________________
+________________________
 Table of Contents
 1.	Project Overview
 2.	Project Structure
@@ -75,7 +75,7 @@ Key design decision: the preprocessing and the classifier are saved together as 
 ________________________________________
 4. Setup and Installation
 Requirements: Python 3.10+ (developed on Python 3.14 with scikit-learn 1.9.1). Exact package versions are pinned in requirements.txt; install them as-is so the saved model loads correctly.
-# 1. Clone the repository
+ ## 1. Clone the repository
 git clone https://github.com/sravanthi-28/AI-ML-Assessment.git
 cd AI-ML-Assessment
 
@@ -97,6 +97,14 @@ uvicorn api.main:app --reload
 Run these commands from the project root (not from inside api/ or src/), otherwise the src imports will fail.
 ________________________________________
 5. Dataset Understanding
+
+Dataset
+
+- Source: IBM Telco Customer Churn dataset (https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+- Size: 7,043 customers, 21 columns (target: `Churn`)
+- Location in repo: `dataset/WA_Fn-UseC_-Telco-Customer-Churn.csv`
+- Preprocessing: implemented in `src/preprocessing.py`
+  (cleaning, encoding, scaling, train/test split)
 Each row is one customer. The columns fall into four groups:
 Group	Columns
 Demographics	gender, SeniorCitizen, Partner, Dependents
