@@ -1,3 +1,4 @@
+from fastapi.middleware.cors import CORSMiddleware
 import logging
 from contextlib import asynccontextmanager
 from typing import Literal
@@ -27,6 +28,13 @@ app = FastAPI(
     title="Customer Churn Prediction API",
     version="1.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 YesNo = Literal["Yes", "No"]
