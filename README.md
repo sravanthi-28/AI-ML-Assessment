@@ -3,6 +3,15 @@ An end-to-end machine learning system that predicts whether a telecom customer i
 Built for the Cognirex Solutions AI/ML Engineer Technical Assessment (Round 2).
 Author: Amshala Sravanthi
 ________________________
+## Live Demo
+
+- **API:** https://churn-api-dhrd.onrender.com
+- **API docs (Swagger):** https://churn-api-dhrd.onrender.com/docs
+- **Demo UI:** https://ai-ml-assessment-frontend.vercel.app
+
+> The API runs on Render's free tier, so it sleeps when idle. The first request
+> after a break can take 30-60 seconds to wake it up.
+________________________
 Table of Contents
 1.	Project Overview
 2.	Project Structure
