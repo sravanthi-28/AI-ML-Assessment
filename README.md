@@ -1,7 +1,7 @@
 Customer Churn Prediction System
 An end-to-end machine learning system that predicts whether a telecom customer is likely to leave, based on historical customer data, and serves predictions through a REST API.
 Built for the Cognirex Solutions AI/ML Engineer Technical Assessment (Round 2).
-Author: [Your Full Name]
+Author: Amshala Sravanthi
 ________________________________________
 Table of Contents
 1.	Project Overview
