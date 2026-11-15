@@ -1,0 +1,12 @@
+fastapi==0.162.7
+uvicorn==0.54.0
+pydantic==2.14.3
+scikit-learn==1.9.1
+xgboost==3.4.1
+pandas==3.1.1
+numpy==2.5.4
+scipy==1.18.1
+joblib==1.6.0
+imbalanced-learn==0.14.2
+sklearn-compat==0.1.6
+threadpoolctl==3.8.0

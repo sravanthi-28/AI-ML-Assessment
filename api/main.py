@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
@@ -8,7 +9,25 @@ from src.predict import get_model, predict_churn
 
 logger = logging.getLogger("churn-api")
 
-app = FastAPI(title="Customer Churn Prediction API", version="1.0")
+model_ready = False
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model_ready
+    try:
+        get_model()
+        model_ready = True
+    except Exception:
+        logger.exception("Could not load model. Run `python -m src.train` first.")
+    yield
+
+
+app = FastAPI(
+    title="Customer Churn Prediction API",
+    version="1.0",
+    lifespan=lifespan,
+)
 
 YesNo = Literal["Yes", "No"]
 YesNoNoInternet = Literal["Yes", "No", "No internet service"]
@@ -60,16 +79,10 @@ class Prediction(BaseModel):
     probability: float
 
 
-@app.on_event("startup")
-def load_model_on_startup():
-    try:
-        get_model()
-    except Exception:
-        logger.exception("Could not load model. Run `python -m src.train` first.")
-
-
 @app.get("/health")
 def health():
+    if not model_ready:
+        raise HTTPException(status_code=503, detail="Model not loaded")
     return {"status": "ok"}
 
 
